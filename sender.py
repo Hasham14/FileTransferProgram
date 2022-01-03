@@ -22,7 +22,7 @@ color_support = parser.color_support
 path = parser.path
 quiet_mode = parser.quiet
 
-if buffer_size < 21:
+if int(buffer_size) < 21:
     print_error("Buffer size should be greater than or equal to 21 bytes", False)
     sys.exit(1)
 # ---
