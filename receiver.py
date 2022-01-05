@@ -68,7 +68,7 @@ print_status("Connected to the server", quiet_mode)
 
 def recv_file(file_name, output_path, quiet_mode, BUFFER_SIZE):
     size = server.recv(100).decode('UTF-8').strip()
-    terminator = server.recv(21).decode('UTF-8')
+    terminator = server.recv(7).decode('UTF-8')
     with open(os.path.join(output_path, file_name), mode="wb") as f:
         data = b''
         while not bytes(terminator, "utf-8") in data:
