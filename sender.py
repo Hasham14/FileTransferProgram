@@ -1,7 +1,7 @@
 #!/usr/bin/python3.9
 # -*- coding: utf-8 -*-
 
-import socket, os, sys, random, time, string, glob
+import socket, os, sys, random, time, string, glob, pickle
 import argparse
 from colorama import Fore, Style
 
@@ -87,12 +87,13 @@ client.send(bytes(f"{buffer_size}", "utf-8"))
 def send_file(FILE, BUFFER_SIZE, quiet_mode):
     size = os.path.getsize(FILE)
     client.send(bytes(f"{size:<100}", "utf-8"))
-    terminator = ''.join(random.choices(string.ascii_lowercase + string.digits, k=21))
-    client.send(bytes(terminator, "utf-8"))
+    terminator = bytes(''.join(random.choices(string.ascii_uppercase + string.digits, k=7)), "utf-8")
+    #terminator = (pickle.dumps(terminator))
+    client.send(terminator)
     with open(FILE, mode="rb") as f:
         while (data := f.read(int(BUFFER_SIZE))):
             client.send(data)
-    client.send(bytes(terminator, "utf-8"))
+    client.send(terminator)
     ack = client.recv(1).decode('UTF-8')
     if bool(int(ack)) == True:
         print_status(f"File sent '{lyellow}{FILE}{reset}'", quiet_mode)
@@ -154,6 +155,6 @@ if bool(int(client_status)) == True:
     pass
 else:
     print_error(f"Cannot send files and directories, exitting", False)
-    server.close()
+    server_socket.close()
     sys.exit(1)
 main(client, path, quiet_mode, buffer_size)
