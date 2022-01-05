@@ -88,7 +88,6 @@ def send_file(FILE, BUFFER_SIZE, quiet_mode):
     size = os.path.getsize(FILE)
     client.send(bytes(f"{size:<100}", "utf-8"))
     terminator = bytes(''.join(random.choices(string.ascii_uppercase + string.digits, k=7)), "utf-8")
-    #terminator = (pickle.dumps(terminator))
     client.send(terminator)
     with open(FILE, mode="rb") as f:
         while (data := f.read(int(BUFFER_SIZE))):
