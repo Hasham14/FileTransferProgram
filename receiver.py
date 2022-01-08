@@ -9,7 +9,7 @@ import argparse
 argparser = argparse.ArgumentParser(description="Transfer files and directories between sockets")
 argparser.add_argument("HOST", action="store", type=str, nargs="?", help="host to connect to")
 argparser.add_argument("PORT", type=int, default=9999, help="port to connect to", action="store")
-argparser.add_argument("--ouput-dir", "-o", action="store", nargs="?", type=str, default="./", help="output the content to this directory (default: current)", dest="output_path")
+argparser.add_argument("--ouput-dir", "-o", action="store", nargs="?", type=str, default=os.getcwd()+os.path.sep, help="output the content to this directory (default: current)", dest="output_path")
 argparser.add_argument("--no-color", "-nc", action="store_false", dest="color_support", help="disables color support (default: enabled)")
 argparser.add_argument("--quiet", "-q", action="store_true", dest="quiet_mode", help="does not print anything except errors")
 
@@ -110,7 +110,7 @@ def main(server, output_path, quiet_mode):
         pass
 
 if __name__ == "__main__":
-    if output_path != "./":
+    if output_path != os.getcwd() + os.path.sep:
         print_status(f"Saving to '{lyellow}{output_path}{reset}'", quiet_mode)
         try:
             os.makedirs(output_path)
