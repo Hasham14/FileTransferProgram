@@ -21,10 +21,6 @@ buffer_size = parser.buffer_size
 color_support = parser.color_support
 path = parser.path
 quiet_mode = parser.quiet
-
-if int(buffer_size) < 21:
-    print_error("Buffer size should be greater than or equal to 21 bytes", False)
-    sys.exit(1)
 # ---
 
 ### FOR COLOR SUPPORT
@@ -102,7 +98,7 @@ def send_file(FILE, BUFFER_SIZE, quiet_mode):
 def main(client, path, quiet_mode, buffer_size):
     for FILE in path:
         if os.path.isdir(FILE) == True:
-            if FILE[-1] == "/":
+            if FILE[-1] == os.path.sep:
                 FILE = FILE[:-1]
             dir_name = os.path.basename(FILE)
 
@@ -111,7 +107,7 @@ def main(client, path, quiet_mode, buffer_size):
                 if os.path.isdir(elem) == True:
                     elem = elem[len(FILE):]
                     elem = dir_name + elem
-                    client.send(bytes(f"[DIR]{elem:<1025}", "utf-8"))
+                    client.send(bytes(f"[DIR]{elem:<1024}", "utf-8"))
                     status = client.recv(1).decode('UTF-8')
                     if bool(int(status)) == True:
                         print_status(f"Created directory '{lyellow}{elem}{reset}'", quiet_mode)
